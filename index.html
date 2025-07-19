@@ -1,26 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Cash4Life Analyzer</title>
+  <meta name="description" content="Analyze and manage Cash4Life lottery results with ease.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    .result { margin: 5px 0; padding: 5px; background: #f0f0f0; border-left: 5px solid #4CAF50; }
+    .result { margin: 5px 0; padding: 10px; background: linear-gradient(to right, #f0f0f0, #e8e8e8); border-left: 5px solid #4CAF50; font-size: 14px; }
     textarea { width: 100%; }
     #results { margin-top: 20px; }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    label { font-weight: bold; display: block; margin-bottom: 6px; }
   </style>
 </head>
 <body>
   <h1>Cash4Life Results Analyzer</h1>
 
   <h2>Add New Results</h2>
-  <textarea id="newResults" rows="6" cols="50" placeholder="Enter numbers like: 4 17 19 29 44 2\nOne line per result"></textarea>
+  <label for="newResults">Add New Results</label>
+  <textarea id="newResults" rows="6" cols="50" 
+    placeholder="Enter numbers like: 4 17 19 29 44 2&#10;One line per result"></textarea>
   <br>
   <button onclick="addNewResults()">Add to Results</button>
+  <button onclick="clearResults()" style="margin-left:8px;">Clear Results</button>
 
-  <div id="results">
-    <h2>Results</h2>
+  <div id="results" role="region" aria-labelledby="results-heading">
+    <h2 id="results-heading">Results</h2>
     <!-- Initial embedded results -->
     <div class="result">4 17 19 29 44 2</div>
     <div class="result">4, 5, 7, 11, 22 + 2</div>
@@ -29,20 +45,37 @@
   </div>
 
   <script>
+    function isValidResult(line) {
+      // Accepts "n n n n n n", or "n, n, n, n, n + n", etc.
+      const regex1 = /^\d{1,2}(?: \d{1,2}){5}$/;        // e.g., 4 17 19 29 44 2
+      const regex2 = /^\d{1,2}(?:, ?\d{1,2}){4} \+ \d{1,2}$/; // e.g., 4, 5, 7, 11, 22 + 2
+      return regex1.test(line.trim()) || regex2.test(line.trim());
+    }
+
     function addNewResults() {
       const input = document.getElementById('newResults').value.trim();
       const lines = input.split('\n').filter(line => line.trim() !== '');
       const resultsDiv = document.getElementById('results');
-
+      let added = 0;
       lines.forEach(line => {
-        const div = document.createElement('div');
-        div.className = 'result';
-        div.textContent = line;
-        resultsDiv.appendChild(div);
+        if (isValidResult(line)) {
+          const div = document.createElement('div');
+          div.className = 'result';
+          div.textContent = line;
+          resultsDiv.appendChild(div);
+          added++;
+        } else {
+          alert(`Invalid result format: ${line}`);
+        }
       });
-
       // Clear input after adding
-      document.getElementById('newResults').value = '';
+      if (added > 0) document.getElementById('newResults').value = '';
+    }
+
+    function clearResults() {
+      const resultsDiv = document.getElementById('results');
+      // Only keep the heading
+      resultsDiv.innerHTML = '<h2 id="results-heading">Results</h2>';
     }
   </script>
 </body>
