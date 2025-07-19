@@ -43,20 +43,14 @@
 
 <script>
 function sendToGoogleSheets() {
-  const input = document.getElementById("drawsInput").value.trim();
+  const endpoint = "https://script.google.com/macros/s/AKfycbziFjvRz_uKIcj9Jp1x7E_yN7wiZ84f1Kd3kKzUnpo6lT2SIvL8kllPNbmywanTuXPnYg/exec";
+  
+  const drawsInput = document.getElementById("drawsInput").value.trim();
   const lines = input.split("\n");
-
-  console.log("🟢 sendToGoogleSheets called. Total lines:", lines.length);
-
-  if (!lines.length) {
-    alert("⚠️ No lines detected.");
-    return;
-  }
 
   lines.forEach(line => {
     const [main, cash] = line.split("+");
     if (!main || !cash) return;
-
     const nums = main.trim().split(",").map(n => parseInt(n.trim()));
     const cb = parseInt(cash.trim());
 
@@ -67,21 +61,21 @@ function sendToGoogleSheets() {
       timestamp: new Date().toLocaleString()
     };
 
-    console.log("📤 Sending:", payload);
-
-    fetch("https://script.google.com/macros/s/AKfycbziFjvRz_uKIcj9Jp1x7E_yN7wiZ84f1Kd3kKzUnpo6lT2SIvL8kllPNbmywanTuXPnYg/exec", {
+    fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(}
-              main_numbers: nums,
-      cash_ball: cb,
-      type: "manual",
-      timestamp: new Date().toLocaleString()
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.text())
+    .then(response => alert("Success: " + response))
+    .catch(err => {
+      console.error(err);
+      alert("Failed to send. See console.")
     });
   });
-}
+ }  
 </script>
 
 </body>
