@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cash4Life Analyzer</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .result { margin: 5px 0; padding: 5px; background: #f0f0f0; border-left: 5px solid #4CAF50; }
+    textarea { width: 100%; }
+    #results { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Cash4Life Results Analyzer</h1>
+
+  <h2>Add New Results</h2>
+  <textarea id="newResults" rows="6" cols="50" placeholder="Enter numbers like: 4 17 19 29 44 2\nOne line per result"></textarea>
+  <br>
+  <button onclick="addNewResults()">Add to Results</button>
+
+  <div id="results">
+    <h2>Results</h2>
+    <!-- Initial embedded results -->
+    <div class="result">4 17 19 29 44 2</div>
+    <div class="result">4, 5, 7, 11, 22 + 2</div>
+    <div class="result">7, 41, 45, 51, 59 + 1</div>
+    <!-- More results can be embedded here -->
+  </div>
+
+  <script>
+    function addNewResults() {
+      const input = document.getElementById('newResults').value.trim();
+      const lines = input.split('\n').filter(line => line.trim() !== '');
+      const resultsDiv = document.getElementById('results');
+
+      lines.forEach(line => {
+        const div = document.createElement('div');
+        div.className = 'result';
+        div.textContent = line;
+        resultsDiv.appendChild(div);
+      });
+
+      // Clear input after adding
+      document.getElementById('newResults').value = '';
+    }
+  </script>
+</body>
+</html>
