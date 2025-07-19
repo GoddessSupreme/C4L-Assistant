@@ -74,16 +74,11 @@ function sendToGoogleSheets() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(payload)
-    })
-    .then(response => response.text())
-    .then(result => {
-      console.log("✅ Response:", result);
-      alert("✅ Sent to Google Sheets!");
-    })
-    .catch(error => {
-      console.error("❌ Error:", error);
-      alert("❌ Failed to send. Check the console.");
+      body: JSON.stringify(}
+              main_numbers: nums,
+      cash_ball: cb,
+      type: "manual",
+      timestamp: new Date().toLocaleString()
     });
   });
 }
