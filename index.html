@@ -184,8 +184,7 @@
         const nums = main.trim().split(",").map(n => parseInt(n.trim()));
         const cb = parseInt(cash.trim());
 
-        if (nums.length === 5 && !nums.includes(NaN) && !isNaN(cb)) {
-          const data = {
+          const payload = {
             main_numbers: nums,
             cash_ball: cb,
             type: "manual",
@@ -194,7 +193,9 @@
 
           fetch(https://script.google.com/macros/s/AKfycbziFjvRz_uKIcj9Jp1x7E_yN7wiZ84f1Kd3kKzUnpo6lT2SIvL8kllPNbmywanTuXPnYg/exec, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json" 
+          },
             body: JSON.stringify(data)
           })
           .then(response => response.text())
